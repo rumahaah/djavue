@@ -7,11 +7,50 @@
 	<script src="{% static 'js/uikit.min.js' %}"></script>
 </head>
 <body>
-
+	<div id="starting">
+    	<div class="container" v-for="winopp in winopps">
+    		<p>${winopp.customer_name}</p>
+    	</div>
+    </div>
 
 
   <script src="{% static 'js/vue.min.js' %}"></script>
   <script type="text/javascript">
+  	Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+  	new Vue({
+  		el: '#starting',
+  		delimiters: ['${','}'],
+  		data: {
+  			winopps: [],
+  			loading: true,
+  			// currentHandover2Pm: {},
+  			message: null,
+  			// newArticle: { 'article_heading': null, 'article_body': null },
+  			search_term: '',
+  		},
+  		mounted: function() {
+  			this.getArticles();
+  		},
+  		methods: {
+  			getArticles: function() {
+  				let api_url = '/winopp/api/winopp/';
+  				if(this.search_term!==''||this.search_term!==null) {
+  					api_url = '/winopp/api/winopp/?search=${this.search_term}'
+  				}
+  				this.loading = true;
+  				this.$http.get(api_url)
+  				.then((response) => {
+  					this.winopps = response.data;
+  					this.loading = false;
+  				})
+  				.catch((err) => {
+  					this.loading = false;
+  					console.log(err);
+  				})
+  			}
+  		}
+  	});
+
   </script>
 </body>
 </html>
