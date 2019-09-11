@@ -7,46 +7,68 @@
 	<script src="{% static 'js/uikit.min.js' %}"></script>
 </head>
 <body>
-	<div id="starting">
-    	<div class="container" v-for="winopp in winopps">
-    		<p>${winopp.customer_name}</p>
+	<div id="myapp">
+		<ul uk-tab>
+		    <li class="uk-active"><a href="#">Test1</a></li>
+		    <li><a href="#">Test2</a></li>
+		    <li class="uk-disabled"><a href="#">Test3</a></li>
+		</ul>
+    	<div class="uk-table-small" >
+    		<table class="uk-table uk-table-hover">
+    		    <thead>
+    		        <tr>
+    		            <th>Customer Name</th>
+    		            <th>Project Name</th>
+    		            <th>PO Date</th>
+    		            <th>PO Known Date</th>
+    		            <th>Initial HO Date</th>
+    		            <th>Approve HO Date</th>
+    		            <th>Remark</th>
+    		        </tr>
+    		    </thead>
+    		    <tbody>
+    		        <tr v-for="winopp in winopps">
+			    		<td>${winopp.customer_name}</td>
+			    		<td>${winopp.project_name}</td>
+			    		<td>${winopp.po_date}</td>
+			    		<td>${winopp.po_known_date}</td>
+			    		<td>${winopp.initial_ho}</td>
+			    		<td>${winopp.approve_ho}</td>
+			    		<td>${winopp.remark}</td>
+    		        </tr>
+    		    </tbody>
+    		</table>
     	</div>
     </div>
 
 
   <script src="{% static 'js/vue.min.js' %}"></script>
+  <script src="{% static 'js/vue-resource.min.js' %}"></script>
   <script type="text/javascript">
   	Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
   	new Vue({
-  		el: '#starting',
+  	// var myapp = new Vue({
+  		el: '#myapp',
   		delimiters: ['${','}'],
   		data: {
   			winopps: [],
-  			loading: true,
-  			// currentHandover2Pm: {},
-  			message: null,
-  			// newArticle: { 'article_heading': null, 'article_body': null },
-  			search_term: '',
   		},
-  		mounted: function() {
-  			this.getArticles();
+  		mounted: function () {
+  			this.getWinopps();
   		},
-  		methods: {
-  			getArticles: function() {
-  				let api_url = '/winopp/api/winopp/';
-  				if(this.search_term!==''||this.search_term!==null) {
-  					api_url = '/winopp/api/winopp/?search=${this.search_term}'
-  				}
-  				this.loading = true;
+  		methods:{
+  			getWinopps: function(){
+  				let api_url= '/winopp/api/winopp/';
+  				this.loading= true;
   				this.$http.get(api_url)
-  				.then((response) => {
-  					this.winopps = response.data;
-  					this.loading = false;
-  				})
-  				.catch((err) => {
-  					this.loading = false;
-  					console.log(err);
-  				})
+  					.then((response) => {
+  						this.winopps = response.data;
+  						this.loading = false;
+  					})
+  					.catch((err) => {
+  						this.loading = false;
+  						console.log(err);
+  					})
   			}
   		}
   	});
