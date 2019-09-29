@@ -25,10 +25,11 @@ SECRET_KEY = 'rywt$yj$9z9g5ge(+!oh3g))(!w^ke_y-6*11%8)&zvc67-p6m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = [
-        '10.24.17.71',
-        ]
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = [
+        # '10.24.17.71',
+        # '192.168.43.163',
+        # ]
 
 
 # Application definition
@@ -42,9 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'winopp',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    # 'winopp.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -123,3 +128,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:8008',
+    'http://127.0.0.1:8000',
+)
